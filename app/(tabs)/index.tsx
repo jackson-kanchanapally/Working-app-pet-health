@@ -103,31 +103,30 @@ export default function App() {
     water: ""
   });
   const route = useruid?.displayName
-
-  React.useEffect(() => {
+  useEffect(()=>{
     const sref = ref(db, "users/" + route + "/");
     onValue(sref, (snapshot) => {
       const dat = snapshot.val();
       setData(dat);
-    });
-  }, [route]);
+    })
+  },[route])
   React.useEffect(() => {
+  
+      if (data) {
+        if ( parseInt(data.heartRate) >= 180 || parseInt(data.heartRate) <= 25) {
+          sendNotification(expoPushToken, "Your pet's heart rate is not normal!!!", "Your pet might fall ill!");
+        }
+        if (parseInt(data.temperature) >= 105) {
+          sendNotification(expoPushToken, "Your pet's Temperature is High!!!", "Your pet might fall ill!");
+        }
+        if (parseInt(data.water) === 0) {
+          sendNotification(expoPushToken, "Your Pet's drowning!!", "Your pet might be drowning!");
+        }
 
-    if (data && parseInt(data?.heartRate) >= 170 || parseInt(data?.heartRate) <= 55) {
-      sendNotification(expoPushToken, "Your pet's heart rate is not normal!!!",
-        "Your pet might fall ill!");
+      }
+  
+  }, []);
 
-    }
-    if (data && parseInt(data?.temperature) >= 105) {
-      sendNotification(expoPushToken, "Your pet's Temperature is High!!!",
-        "Your pet might fall ill!");
-    }
-    if (data && parseInt(data?.water) === 0) {
-      sendNotification(expoPushToken, "Your Pet's drowning!!",
-        "Your pet might be drowning!");
-    }
-
-  }, [data]);
   const [expoPushToken, setExpoPushToken] = useState('');
   const [notification, setNotification] = useState<
     Notifications.Notification | undefined
@@ -183,7 +182,7 @@ export default function App() {
                 fontWeight: "700",
               }}
             >
-              {data && parseInt(data?.heartRate) >= 170 ? Math.floor(parseInt(data?.heartRate) * 0.6) : data && parseInt(data?.heartRate) >= 120 ? Math.floor(parseInt(data?.heartRate) * 0.7) : data && parseInt(data?.heartRate)}
+              {data && parseInt(data?.heartRate) >= 170 ? Math.floor(parseInt(data?.heartRate) * 0.6) : data && parseInt(data?.heartRate) >= 140 ? Math.floor(parseInt(data?.heartRate) * 0.7) : data && parseInt(data?.heartRate)}
 
             </Box>
             <Text>bpm</Text>
@@ -208,8 +207,8 @@ export default function App() {
               fontWeight="700"
               color={data && parseInt(data?.temperature) >= 105 ? "red.600" : "black"}
             >
-              {data && data.temperature}°F
-            </Text>
+              {data && parseInt(data?.temperature)}°F
+            </Text> 
           </Box>
         </Flex>
         <Flex direction="row" justifyContent="center" mb="30px" w="90%">
@@ -234,33 +233,9 @@ export default function App() {
           </Box>
         </Flex>
         <Box mt="45px">
-          <Image source={data && parseInt(data?.temperature) >= 105 || data && parseInt(data?.heartRate) >= 160 || data && parseInt(data?.heartRate) <= 70 ? myImagesickDog : myImagedogGif} style={{ width: 160, height: 160 }} />
+          <Image source={data && parseInt(data?.temperature) >= 105 || data && parseInt(data?.heartRate) >= 180 || data && parseInt(data?.heartRate) <= 60 ? myImagesickDog : myImagedogGif} style={{ width: 160, height: 160 }} />
         </Box>
-        {/* <Box mt="30px" mb="30px">
-      <Button
-        bg="gray.100"
-        borderRadius="sm"
-        size="sm"
-        shadow={6}
-        _text={{
-          color: "black",
-          fontSize: "16px",
-        }}
-      >
-        Create QR
-      </Button> 
-     </Box> */}
-        {/* <Flex h="50px" w="90%"
-        pl="10px" mt="20px"
-        justifyContent="center">
-        <Text fontSize="2xl">
-          Create a Collar QR for your pet
 
-        </Text>
-      </Flex> */}
-        {/* <Divider px="2" w="90%" />
-      <QRForm />
-      <QRCode value="Mobile no: 984654211, address:9-113 jkg kjgjhg , pet name: snoopy" /> */}
       </Flex>
     </ScrollView>
 
