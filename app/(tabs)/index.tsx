@@ -125,7 +125,7 @@ export default function App() {
 
       }
   
-  }, []);
+  }, [data]);
 
   const [expoPushToken, setExpoPushToken] = useState('');
   const [notification, setNotification] = useState<
