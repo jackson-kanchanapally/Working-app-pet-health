@@ -113,7 +113,7 @@ export default function App() {
   React.useEffect(() => {
   
       if (data) {
-        if ( parseInt(data.heartRate) >= 180 || parseInt(data.heartRate) <= 25) {
+        if ( parseInt(data.heartRate) >= 200 || parseInt(data.heartRate) <= 25) {
           sendNotification(expoPushToken, "Your pet's heart rate is not normal!!!", "Your pet might fall ill!");
         }
         if (parseInt(data.temperature) >= 105) {
